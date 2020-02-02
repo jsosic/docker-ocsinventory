@@ -29,7 +29,7 @@ RUN apt-get update \
        libxml2 libc6-dev \
        build-essential make tar curl \
  && rm -rf /var/lib/apt/lists/* \
- && cpan -i XML::Entities \
+ && cpan -i XML::Entities && rm -rf /root/.cpan \
  && echo 'ServerName ocs' >> /etc/apache2/conf-available/ocs_custom.conf \
  && echo 'CustomLog /dev/stdout vhost_combined' >> /etc/apache2/conf-available/ocs_custom.conf \
  && echo 'ErrorLog /dev/stderr' >> /etc/apache2/conf-available/ocs_custom.conf \
