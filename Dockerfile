@@ -30,10 +30,12 @@ RUN apt-get update \
        build-essential make tar curl \
  && rm -rf /var/lib/apt/lists/* \
  && cpan -i XML::Entities \
- && echo 'ServerName ocs' >> /etc/apache2/conf-available/servername.conf \
+ && echo 'ServerName ocs' >> /etc/apache2/conf-available/ocs_custom.conf \
+ && echo 'CustomLog /dev/stdout vhost_combined' >> /etc/apache2/conf-available/ocs_custom.conf \
+ && echo 'ErrorLog /dev/stderr' >> /etc/apache2/conf-available/ocs_custom.conf \
  && /usr/sbin/a2dissite 000-default \
  && /usr/sbin/a2disconf apache2-doc localized-error-pages \
- && /usr/sbin/a2enconf servername \
+ && /usr/sbin/a2enconf ocs_custom \
  && /usr/sbin/a2enmod rewrite authz_user
 
 RUN cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime
