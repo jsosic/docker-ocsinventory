@@ -28,15 +28,9 @@ RUN apt-get update \
        libnet-ip-perl libsoap-lite-perl libarchive-zip-perl libmodule-build-perl \
        libxml2 libc6-dev \
        build-essential make tar curl \
- && rm -rf /var/lib/apt/lists/* \
- && cpan -i XML::Entities && rm -rf /root/.cpan \
- && echo 'ServerName ocs' >> /etc/apache2/conf-available/ocs_custom.conf \
- && echo 'CustomLog /dev/stdout vhost_combined' >> /etc/apache2/conf-available/ocs_custom.conf \
- && echo 'ErrorLog /dev/stderr' >> /etc/apache2/conf-available/ocs_custom.conf \
- && /usr/sbin/a2dissite 000-default \
- && /usr/sbin/a2disconf apache2-doc localized-error-pages \
- && /usr/sbin/a2enconf ocs_custom \
- && /usr/sbin/a2enmod rewrite authz_user
+ && rm -rf /var/lib/apt/lists/*
+
+RUN cpan -i XML::Entities && rm -rf /root/.cpan
 
 RUN cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 
@@ -72,7 +66,10 @@ RUN curl -sS -OL https://github.com/OCSInventory-NG/OCSInventory-ocsreports/rele
 COPY --chown=www-data:www-data dbconfig.inc.php /usr/share/ocsinventory-reports/ocsreports/
 
 COPY conf/* /etc/apache2/conf-available/
-RUN /usr/sbin/a2enconf ocsinventory-reports z-ocsinventory-server
+RUN /usr/sbin/a2dissite 000-default \
+ && /usr/sbin/a2disconf apache2-doc localized-error-pages \
+ && /usr/sbin/a2enmod rewrite authz_user \
+ && /usr/sbin/a2enconf ocsinventory-custom ocsinventory-reports z-ocsinventory-server
 
 EXPOSE 80
 
