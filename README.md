@@ -52,9 +52,11 @@ Any kind of MySQL server is supported: no matter the locally installed, remote M
 Once you have a MySQL up and running, creating a database and adding a user is a neccessity:
 
 ```
-sudo -u postgres createuser ocs
-sudo -u postgres createdb ocsweb -O ocs
-sudo -u postgres psql -c "ALTER USER ocs SET PASSWORD TO 'super_secret'"
+# mysql
+> CREATE DATABASE ocsweb;
+> CREATE USER 'ocs'@'%' IDENTIFIED BY 'ocs';
+> GRANT ALL PRIVILEGES ON ocsweb.* TO 'ocs'@'%' WITH GRANT OPTION;
+> FLUSH PRIVILEGES;
 ```
 
 ## Upgrading
